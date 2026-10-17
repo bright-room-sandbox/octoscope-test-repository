@@ -1,0 +1,17 @@
+# A job that fails on purpose, for octoscope's checks view: its log carries
+# tabs the way go test prints them, the colour codes the runner adds to every
+# command, and one escape that is not a colour.
+name: failing log
+on: pull_request
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Passing step
+        run: echo "this step passes"
+      - name: Print like go test
+        run: |
+          printf 'ok\tgithub.com/example/pass\t0.002s\n'
+          printf 'FAIL\tgithub.com/example/fail\t0.003s\n'
+          printf '\033[2Knot a colour: erase line\n'
+          exit 1
